@@ -8,11 +8,12 @@ function Block(x,y)
         height = _G.block_consts.HEIGHT,
         x = x,
         y = y,
+        is_hit = false,
         color = getColor(),
         draw = function (self,mode)
             love.graphics.setColor(self.color)
             love.graphics.rectangle(mode,self.x,self.y,self.width, self.height)
-        end
+        end,
     }
 end
 

@@ -1,14 +1,14 @@
-function Ball()
+function Ball(x, y)
     return {
         speed = 300,
         radius = ball_consts.RADIUS,
-        x = love.graphics.getWidth() / 2,
-        y = love.graphics.getHeight() / 2,
+        x = x,
+        y = y,
         direction = ball_consts.DIRECTION.DOWN,
         move = function(self, dt, player)
             -- Up
             if self.direction == ball_consts.DIRECTION.UP then
-                if self:checkHasCollidedWithCeiling() then
+                if self:checkHasCollidedWithCeiling() or self:checkHasCollidedWithBlock(_G.game.blocks) then
                     self.direction = ball_consts.DIRECTION.DOWN
                 else
                     self.y = self.y - self.speed * dt
@@ -19,7 +19,7 @@ function Ball()
             if self.direction == ball_consts.DIRECTION.UPRIGHT then
                 if self:checkHasCollidedWithWall() then
                     self.direction = ball_consts.DIRECTION.UPLEFT
-                elseif self:checkHasCollidedWithCeiling() then
+                elseif self:checkHasCollidedWithCeiling() or self:checkHasCollidedWithBlock(_G.game.blocks) then
                     self.direction = ball_consts.DIRECTION.DOWNRIGHT
                 else
                     self.y = self.y - self.speed * dt
@@ -31,7 +31,7 @@ function Ball()
             if self.direction == ball_consts.DIRECTION.UPLEFT then
                 if self:checkHasCollidedWithWall() then
                     self.direction = ball_consts.DIRECTION.UPRIGHT
-                elseif self:checkHasCollidedWithCeiling() then
+                elseif self:checkHasCollidedWithCeiling() or self:checkHasCollidedWithBlock(_G.game.blocks) then
                     self.direction = ball_consts.DIRECTION.DOWNLEFT
                 else
                     self.y = self.y - self.speed * dt
@@ -124,13 +124,25 @@ function Ball()
                 if self.x > player.x
                     and self.x + self.radius < player.x + player.width
                     and self.y + self.radius >= player.y then
+                    _G.game.points = _G.game.points + 1
                     return true
                 end
                 return false
             end
         end,
-        toString = function (self)
-            return tostring(self.x) .. ' ' .. tostring(self.y)
+        checkHasCollidedWithBlock = function(self, blocks)
+            for _, line in ipairs(blocks) do
+                for _, block in ipairs(line) do
+                    if self.x >= block.x
+                        and self.x <= block.x + block.width
+                        and self.y <= block.y + block.height then
+                        block.is_hit = true
+                        _G.game.points = _G.game.points + 1
+                        return true
+                    end
+                end
+            end
+            return false
         end
     }
 end
