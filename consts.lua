@@ -1,5 +1,5 @@
 _G.player_consts = {
-    WIDTH = 600,
+    WIDTH = 100,
     HEIGHT = 30,
     SPEED = 600,
     DIRECTION = { 
@@ -19,4 +19,9 @@ _G.ball_consts = {
         DOWNLEFT = 'downleft',
         DOWNRIGHT = 'downright',
     }
+}
+
+_G.block_consts = {
+    WIDTH = 75,
+    HEIGHT = 45
 }

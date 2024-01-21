@@ -87,7 +87,7 @@ function Ball()
             end
         end,
         draw = function(self)
-            love.graphics.setColor(255 / 255, 87 / 255, 51 / 255)
+            love.graphics.setColor(255 / 255, 16 / 255, 240 / 255)
             love.graphics.circle('fill', self.x, self.y, self.radius)
         end,
         checkHasCollidedWithCeiling = function(self)
@@ -128,6 +128,9 @@ function Ball()
                 end
                 return false
             end
+        end,
+        toString = function (self)
+            return tostring(self.x) .. ' ' .. tostring(self.y)
         end
     }
 end
