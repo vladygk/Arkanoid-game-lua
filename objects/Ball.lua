@@ -125,6 +125,7 @@ function Ball(x, y)
                     and self.x + self.radius < player.x + player.width
                     and self.y + self.radius >= player.y then
                     _G.game.points = _G.game.points + 1
+                    _G.sound:playEffect('bounce')
                     return true
                 end
                 return false
@@ -138,6 +139,7 @@ function Ball(x, y)
                         and self.y <= block.y + block.height then
                         block.is_hit = true
                         _G.game.points = _G.game.points + 1
+                        _G.sound:playEffect('breakk')
                         return true
                     end
                 end

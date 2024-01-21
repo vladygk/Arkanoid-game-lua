@@ -1,6 +1,6 @@
-function Block(x,y)
-    local getColor = function ()
-        return {math.random(255)/255,math.random(255)/255,math.random(255)/255}
+function Block(x, y)
+    local getColor = function()
+        return { math.random(255) / 255, math.random(255) / 255, math.random(255) / 255 }
     end
 
     return {
@@ -10,9 +10,9 @@ function Block(x,y)
         y = y,
         is_hit = false,
         color = getColor(),
-        draw = function (self,mode)
+        draw = function(self, mode)
             love.graphics.setColor(self.color)
-            love.graphics.rectangle(mode,self.x,self.y,self.width, self.height)
+            love.graphics.rectangle(mode, self.x, self.y, self.width, self.height)
         end,
     }
 end

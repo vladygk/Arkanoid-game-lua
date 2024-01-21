@@ -1,8 +1,8 @@
 _G.player_consts = {
-    WIDTH = 100,
+    WIDTH = 300,
     HEIGHT = 30,
     SPEED = 600,
-    DIRECTION = { 
+    DIRECTION = {
         LEFT = 'left',
         RIGHT = 'right',
         IDLE = 'idle'
@@ -11,7 +11,7 @@ _G.player_consts = {
 
 _G.ball_consts = {
     RADIUS = 15,
-    DIRECTION = { 
+    DIRECTION = {
         UP = 'up',
         UPLEFT = 'upleft',
         UPRIGHT = 'upright',

@@ -15,16 +15,16 @@ function Button(text, x, y, width, height, func, funcParam)
         end,
 
         checkIsCursorInButton = function(self, mouse_x, mouse_y)
-            if mouse_x  >= self.x
+            if mouse_x >= self.x
                 and mouse_x <= self.x + self.width
-                and mouse_y  >= self.y
+                and mouse_y >= self.y
                 and mouse_y <= self.y + self.height then
-                    if funcParam then
-                        self.func(funcParam)
-                    else
-                        self.func()
-                    end
-                    return true
+                if funcParam then
+                    self.func(funcParam)
+                else
+                    self.func()
+                end
+                return true
             end
             return false
         end

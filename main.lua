@@ -2,35 +2,49 @@ _G.love = require('love')
 require('consts')
 local Player = require('objects.Player')
 local Ball = require('objects.Ball')
+
 local Game = require('Game')
 local Button = require('components.Button')
+local Sounds = require('Sounds')
 math.randomseed(os.time())
 
 function StartGame()
     _G.game:startGame('running')
 end
 
-
+function RestartGame()
+    _G.game:startGame('menu')
+end
 
 function love.load()
     _G.game = Game()
     _G.game:startGame('menu')
     _G.player = Player()
+
+    _G.sound = Sounds()
+
+
+    _G.cursor = love.graphics.newImage("assets/cursor.png")
     _G.heart_icon = love.graphics.newImage("assets/heart.png")
     _G.bg_image = love.graphics.newImage("assets/image.jpg")
+    _G.bg = love.graphics.newImage("assets/bg.png")
+    _G.end_bg = love.graphics.newImage("assets/end.png")
+
     _G.game.buttons.menu_buttons.startGame = Button("Start game", 10, 90, nil, nil, StartGame)
     _G.game.buttons.menu_buttons.exitGame = Button("Exit game", 10, 150, nil, nil, love.event.quit)
 
     _G.game.buttons.ended_buttons.startGame = Button("Restart", love.graphics.getWidth() / 2 - 300 / 2,
-        love.graphics.getHeight() / 2 - 300 / 2, 300, 130, StartGame)
-        
+        love.graphics.getHeight() / 2 + 220, 300, 130, RestartGame)
     _G.game.buttons.ended_buttons.exitGame = Button("Exit game", love.graphics.getWidth() / 2 - 300 / 2,
-        love.graphics.getHeight() / 2 - 300 / 2 + 140, 300, 130, love.event.quit)
+        love.graphics.getHeight() / 2 + 360, 300, 130, love.event.quit)
 end
 
 function love.update(dt)
+    if not _G.sound:isSongPlaying() then
+        _G.sound:playSong()
+    end
+    love.mouse.setVisible(false)
     if _G.game.state.running then
-        love.mouse.setVisible(false)
         if #_G.game.balls <= 0 or #_G.game.blocks <= 0 or _G.game.lives <= 0 then
             _G.game:changeState('ended')
         end
@@ -52,13 +66,9 @@ function love.update(dt)
             _G.player:move(player_consts.DIRECTION.RIGHT, dt)
         end
     elseif _G.game.state.menu then
-        love.mouse.setVisible(true)
         _G.game.mouse.x, _G.game.mouse.y = love.mouse.getPosition()
     elseif _G.game.state.ended then
-        love.mouse.setVisible(true)
         _G.game.mouse.x, _G.game.mouse.y = love.mouse.getPosition()
-    elseif _G.game.state.paused then
-        love.mouse.setVisible(false)
     end
 end
 
@@ -98,7 +108,6 @@ end
 function love.draw()
     love.graphics.setColor(1, 1, 1)
     love.graphics.setNewFont(16)
-    love.graphics.print(tostring(_G.game.state.running))
 
     if _G.game.state.paused then
         love.graphics.printf('Paused', love.graphics.newFont(48), 0, love.graphics.getHeight() / 2,
@@ -107,22 +116,53 @@ function love.draw()
     end
 
     if _G.game.state.menu then
-        love.graphics.draw(_G.bg_image, love.graphics.getWidth()/7, love.graphics.getHeight()/4, 0, 0.7)
+        love.graphics.setColor(0, 1, 65 / 255)
+        love.graphics.printf('Arkanoid 45\u{2122}', love.graphics.newFont(60), 0, 100,
+            love.graphics.getWidth(),
+            'center')
+        love.graphics.draw(_G.bg_image, love.graphics.getWidth() / 7, love.graphics.getHeight() / 4, 0, 0.7)
         for _, but in pairs(_G.game.buttons.menu_buttons) do
             but:draw(20, 15)
         end
+        love.graphics.draw(_G.cursor, _G.game.mouse.x - 20, _G.game.mouse.y - 20, 0, 0.08)
     end
     if _G.game.state.ended then
-        love.graphics.printf('Your score: '.. _G.game.points, love.graphics.newFont(48), 0, love.graphics.getHeight() / 5,
+        love.graphics.setColor(0, 1, 65 / 255, 0.5)
+        love.graphics.draw(_G.end_bg, 27, 0, 0, 0.75)
+        love.graphics.setColor(0, 1, 65 / 255)
+        love.graphics.printf('Your score: ' .. _G.game.points, love.graphics.newFont(48), 0,
+            love.graphics.getHeight() / 5,
             love.graphics.getWidth(),
             'center')
+        if _G.game.points < 45 then
+            love.graphics.printf('You are pathetic, mortal..', love.graphics.newFont(40), 0,
+                love.graphics.getHeight() / 5 + 50,
+                love.graphics.getWidth(),
+                'center')
+        else
+            if _G.game.points == 45 then
+                love.graphics.printf('You are chado moe, good job', love.graphics.newFont(48), 0,
+                    love.graphics.getHeight() / 5 + 50,
+                    love.graphics.getWidth(),
+                    'center')
+            else
+                love.graphics.printf('Are you challenging me, mijiturko?', love.graphics.newFont(48), 0,
+                    love.graphics.getHeight() / 5 + 50,
+                    love.graphics.getWidth(),
+                    'center')
+            end
+        end
         for _, but in pairs(_G.game.buttons.ended_buttons) do
             love.graphics.setNewFont(32)
-            but:draw(20, 15)
+            but:draw(80, 40)
         end
+        love.graphics.draw(_G.cursor, _G.game.mouse.x - 20, _G.game.mouse.y - 20, 0, 0.08)
     end
     if _G.game.state.running or _G.game.state.paused then
+        love.graphics.setColor(0, 1, 65 / 255, 0.5)
+        love.graphics.draw(_G.bg, 45, 100, 0, 0.8)
         for i = 0, _G.game.lives - 1 do
+            love.graphics.setColor(1, 0.41, 0.70)
             love.graphics.draw(_G.heart_icon, 00, i * 50, 0.05, 0.05)
         end
         _G.game:drawPoints()

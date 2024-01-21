@@ -17,8 +17,8 @@ function Game()
         lives = 5,
         balls = {},
         blocks = {},
-        startGame = function (self,state)
-            self.lives =5
+        startGame = function(self, state)
+            self.lives = 5
             self.balls = {}
             self.blocks = {}
             self:changeState(state)
