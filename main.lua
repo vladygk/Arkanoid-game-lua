@@ -34,9 +34,9 @@ function love.load()
     _G.game.buttons.menu_buttons.exitGame = Button("Exit game", 10, 150, nil, nil, love.event.quit)
 
     _G.game.buttons.ended_buttons.startGame = Button("Restart", love.graphics.getWidth() / 2 - 300 / 2,
-        love.graphics.getHeight() / 2 + 220, 300, 130, RestartGame)
+        love.graphics.getHeight() / 2 + 170, 300, 130, RestartGame)
     _G.game.buttons.ended_buttons.exitGame = Button("Exit game", love.graphics.getWidth() / 2 - 300 / 2,
-        love.graphics.getHeight() / 2 + 360, 300, 130, love.event.quit)
+        love.graphics.getHeight() / 2 + 310, 300, 130, love.event.quit)
 end
 
 function love.update(dt)
@@ -117,7 +117,7 @@ function love.draw()
 
     if _G.game.state.menu then
         love.graphics.setColor(0, 1, 65 / 255)
-        love.graphics.printf('Arkanoid 45\u{2122}', love.graphics.newFont(60), 0, 100,
+        love.graphics.printf('Arkanoid 45', love.graphics.newFont(60), 0, 100,
             love.graphics.getWidth(),
             'center')
         love.graphics.draw(_G.bg_image, love.graphics.getWidth() / 7, love.graphics.getHeight() / 4, 0, 0.7)
@@ -128,7 +128,7 @@ function love.draw()
     end
     if _G.game.state.ended then
         love.graphics.setColor(0, 1, 65 / 255, 0.5)
-        love.graphics.draw(_G.end_bg, 27, 0, 0, 0.75)
+        love.graphics.draw(_G.end_bg, 80, 10, 0, 0.65)
         love.graphics.setColor(0, 1, 65 / 255)
         love.graphics.printf('Your score: ' .. _G.game.points, love.graphics.newFont(48), 0,
             love.graphics.getHeight() / 5,
@@ -160,7 +160,7 @@ function love.draw()
     end
     if _G.game.state.running or _G.game.state.paused then
         love.graphics.setColor(0, 1, 65 / 255, 0.5)
-        love.graphics.draw(_G.bg, 45, 100, 0, 0.8)
+        love.graphics.draw(_G.bg, 45, 10, 0, 0.8)
         for i = 0, _G.game.lives - 1 do
             love.graphics.setColor(1, 0.41, 0.70)
             love.graphics.draw(_G.heart_icon, 00, i * 50, 0.05, 0.05)
